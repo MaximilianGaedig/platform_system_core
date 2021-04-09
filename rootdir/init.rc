@@ -228,6 +228,12 @@ on init
     write /proc/sys/kernel/hung_task_timeout_secs 0
     write /proc/cpu/alignment 4
 
+    write /proc/sys/fs/protected_hardlinks 1
+    write /proc/sys/fs/protected_symlinks 1
+
+    write /proc/sys/fs/protected_fifos 2
+    write /proc/sys/fs/protected_regular 2
+
     # scheduler tunables
     # Disable auto-scaling of scheduler tunables with hotplug. The tunables
     # will vary across devices in unpredictable ways if allowed to scale with
@@ -854,6 +860,8 @@ on boot
     chown root system /sys/block/zram0/writeback
     chmod 0664 /sys/block/zram0/writeback
 
+    write /proc/sys/vm/max_map_count 524240
+
     # Tweak background writeout
     write /proc/sys/vm/dirty_expire_centisecs 200
     write /proc/sys/vm/dirty_background_ratio  5
@@ -993,6 +1001,24 @@ on property:sys.sysctl.extra_free_kbytes=*
 # "tcp_default_init_rwnd" Is too long!
 on property:sys.sysctl.tcp_def_init_rwnd=*
     write /proc/sys/net/ipv4/tcp_default_init_rwnd ${sys.sysctl.tcp_def_init_rwnd}
+
+on property:persist.security.deny_new_usb=disabled
+    write /proc/sys/kernel/deny_new_usb 0
+
+on property:persist.security.deny_new_usb=enabled
+    write /proc/sys/kernel/deny_new_usb 1
+
+on property:persist.security.deny_new_usb=dynamic
+    write /proc/sys/kernel/deny_new_usb 1
+
+on property:security.deny_new_usb=*
+    write /proc/sys/kernel/deny_new_usb ${security.deny_new_usb}
+
+on property:persist.native_debug=true
+    write /proc/sys/kernel/yama/ptrace_scope 0
+
+on property:persist.native_debug=false
+    write /proc/sys/kernel/yama/ptrace_scope 2
 
 # perf_event_open syscall security:
 # Newer kernels have the ability to control the use of the syscall via SELinux
