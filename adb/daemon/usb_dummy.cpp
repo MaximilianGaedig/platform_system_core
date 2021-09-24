@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-#pragma once
+#include "usb_legacy.h"
 
-#include "errno.h"
+#include <android-base/logging.h>
 
-#include "android-base/macros.h"
+int usb_write(usb_handle*, const void*, int) {
+    LOG(FATAL) << "unimplemented";
+    return -1;
+}
 
-namespace android {
-namespace base {
+int usb_read(usb_handle*, void*, int) {
+    LOG(FATAL) << "unimplemented";
+    return -1;
+}
 
-class ErrnoRestorer {
- public:
-  ErrnoRestorer() : saved_errno_(errno) {}
+int usb_close(usb_handle*) {
+    LOG(FATAL) << "unimplemented";
+    return -1;
+}
 
-  ~ErrnoRestorer() { errno = saved_errno_; }
+void usb_reset(usb_handle*) {
+    LOG(FATAL) << "unimplemented";
+}
 
-  // Allow this object to be used as part of && operation.
-  explicit operator bool() const { return true; }
-
- private:
-  const int saved_errno_;
-
-  DISALLOW_COPY_AND_ASSIGN(ErrnoRestorer);
-};
-
-}  // namespace base
-}  // namespace android
+void usb_kick(usb_handle*) {
+    LOG(FATAL) << "unimplemented";
+}

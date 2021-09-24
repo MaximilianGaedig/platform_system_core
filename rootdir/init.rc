@@ -860,7 +860,7 @@ on boot
     chown root system /sys/block/zram0/writeback
     chmod 0664 /sys/block/zram0/writeback
 
-    write /proc/sys/vm/max_map_count 1048576
+    write /proc/sys/vm/max_map_count 524240
 
     # Tweak background writeout
     write /proc/sys/vm/dirty_expire_centisecs 200
@@ -1013,12 +1013,6 @@ on property:persist.security.deny_new_usb=dynamic
 
 on property:security.deny_new_usb=*
     write /proc/sys/kernel/deny_new_usb ${security.deny_new_usb}
-
-on property:persist.native_debug=true
-    write /proc/sys/kernel/yama/ptrace_scope 0
-
-on property:persist.native_debug=false
-    write /proc/sys/kernel/yama/ptrace_scope 2
 
 # perf_event_open syscall security:
 # Newer kernels have the ability to control the use of the syscall via SELinux

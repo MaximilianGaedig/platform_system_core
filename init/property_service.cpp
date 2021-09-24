@@ -70,6 +70,7 @@
 #include "subcontext.h"
 #include "system/core/init/property_service.pb.h"
 #include "util.h"
+#include "vendor_init.h"
 
 using namespace std::literals;
 
@@ -912,10 +913,15 @@ void PropertyLoadBootDefaults() {
         }
     }
 
+    // Update with vendor-specific property runtime overrides
+    vendor_load_properties();
+
     property_initialize_ro_product_props();
     property_derive_build_fingerprint();
 
-    update_sys_usb_config();
+    if (android::base::GetBoolProperty("ro.persistent_properties.ready", false)) {
+        update_sys_usb_config();
+    }
 }
 
 bool LoadPropertyInfoFromFile(const std::string& filename,
